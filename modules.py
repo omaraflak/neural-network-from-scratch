@@ -1,5 +1,3 @@
-"""Layers for neural networks."""
-
 import numpy as np
 
 

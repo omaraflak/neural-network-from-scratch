@@ -1,5 +1,3 @@
-"""Helper to train a neural network and make evaluations."""
-
 import numpy as np
 import losses
 import modules

@@ -1,4 +1,3 @@
-"""Optimizers for parameters."""
 import numpy as np
 import modules
 

@@ -1,5 +1,3 @@
-"""Loss functions for training neural networks."""
-
 import numpy as np
 
 
