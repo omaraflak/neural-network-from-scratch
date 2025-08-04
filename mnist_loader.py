@@ -4,13 +4,15 @@ import gzip
 import os
 
 
-def download_gzip(url: str, cache_filename: str = ".cache") -> bytes:
-    if not os.path.exists(cache_filename):
-        os.makedirs(cache_filename)
+def download_gzip(url: str, cache_path: str = ".cache") -> bytes:
+    if not os.path.exists(cache_path):
+        os.makedirs(cache_path)
 
     filename = os.path.basename(url)
-    if filename in os.listdir(cache_filename):
-        with open(os.path.join(cache_filename, filename), "rb") as file:
+    filepath = os.path.join(cache_path, filename)
+
+    if filename in os.listdir(cache_path):
+        with open(filepath, "rb") as file:
             return gzip.decompress(file.read())
 
     response = requests.get(url)
@@ -18,7 +20,7 @@ def download_gzip(url: str, cache_filename: str = ".cache") -> bytes:
         raise Exception(f"Failed to download {url}")
 
     data = response.content
-    with open(os.path.join(cache_filename, filename), "wb") as file:
+    with open(filepath, "wb") as file:
         file.write(data)
 
     return gzip.decompress(data)
@@ -44,9 +46,15 @@ def download_mnist() -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     # The header is 16 bytes: magic number (4), number of images (4),
     # rows (4), columns (4)
     x_train = np.frombuffer(
-        train_images_gz, dtype=np.uint8, offset=16).reshape(-1, 28, 28)
-    x_test = np.frombuffer(test_images_gz, dtype=np.uint8,
-                           offset=16).reshape(-1, 28, 28)
+        train_images_gz,
+        dtype=np.uint8,
+        offset=16
+    ).reshape(-1, 28, 28)
+    x_test = np.frombuffer(
+        test_images_gz,
+        dtype=np.uint8,
+        offset=16
+    ).reshape(-1, 28, 28)
 
     # Parse label files (idx1-ubyte format)
     # The header is 8 bytes: magic number (4), number of items (4)
